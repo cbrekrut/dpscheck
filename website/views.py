@@ -148,12 +148,13 @@ def delete_marker(request, id):
         marker = Marker.objects.get(pk=id)
 
         # Проверяем, нажимал ли пользователь на кнопку "Уехали"
-        if LeaveAction.objects.filter(user=request.user, marker=marker).exists():
+        if not request.user.is_superuser and LeaveAction.objects.filter(user=request.user, marker=marker).exists():
             print('User already left marker')
             return JsonResponse({'status': 'success', 'deleted': False, 'message': 'Вы уже отмечали метку как "Уехали"'})
 
         # Добавляем запись о нажатии на кнопку "Уехали"
-        LeaveAction.objects.create(user=request.user, marker=marker)
+        if not request.user.is_superuser:
+            LeaveAction.objects.create(user=request.user, marker=marker)
 
         # Обновляем счётчик и проверяем, нужно ли удалять метку
         if marker.is_active():
