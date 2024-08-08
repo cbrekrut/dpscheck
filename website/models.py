@@ -33,11 +33,11 @@ class UserProfile(models.Model):
     def __str__(self):
         return str(self.user.username)
     def can_add_marker(self):
-        # Проверяем, прошло ли 7 минут с последнего добавления метки
+        if self.user.is_superuser:
+            return True
         if self.last_marker_time:
-            if self.user.is_superuser: return True
-            return timezone.now() >= self.last_marker_time + timezone.timedelta(seconds=300)
-        return True  # Разрешаем, если метки еще не ставились
+            return timezone.now() >= self.last_marker_time + timezone.timedelta(minutes=7)
+        return True
 
 
 from django.db.models.signals import post_save
