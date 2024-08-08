@@ -28,6 +28,7 @@ class LeaveAction(models.Model):
         
         
 class UserProfile(models.Model):
+    marker_count = models.IntegerField(default=0) 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     last_marker_time = models.DateTimeField(null=True, blank=True)  # Время последней метки
     def __str__(self):
