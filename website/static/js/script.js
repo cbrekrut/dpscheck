@@ -243,3 +243,13 @@ function getProfile() {
         }
     })
 }
+
+function putOnMyGeo() {
+    navigator.geolocation.getCurrentPosition(function (position) {
+        var userCoords = [position.coords.latitude, position.coords.longitude];
+        
+
+    }, function (error) {
+        console.error("Ошибка при получении местоположения: ", error);
+    });
+}
